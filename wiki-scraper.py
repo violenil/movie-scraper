@@ -5,7 +5,7 @@ import csv
 
 
 def scrapeWikiMovie(url):
-    res = requests.get(url)  # retrieces the page
+    res = requests.get(url)  # retrieves the page
     res.raise_for_status()   # checks for any errors
     wikiSoup = bs4.BeautifulSoup(res.text, "html.parser") # res.text is all text from page, html.parser helps to structure the text into html format
     infoTable = wikiSoup.find(class_="infobox vevent")
@@ -13,7 +13,7 @@ def scrapeWikiMovie(url):
     directedBy = ""
     movieName = infoTable.tr.string
     releaseDates = [] 
-    starring = []
+    starring = []    # some of these still dont come out right
     plot = ""
 
     all_tr = infoTable.find_all('tr')    #saving all table rows to this, can iterate through them
@@ -33,4 +33,13 @@ def scrapeWikiMovie(url):
     print("Movie: " + movieName + "\n" + "Directed by: " + directedBy + "\n" + "Release date: " + str(releaseDates) + "\n")
     print("Starring: " + str(starring))
 
-scrapeWikiMovie("https://en.wikipedia.org/wiki/Once_Upon_a_Time_in_Hollywood")
+f = open('movienames.txt', 'r')
+text = f.readline()
+f.close()
+txtList = text.split(";")
+movieList = []
+for movie in txtList:
+    movieList.append(movie.replace(" ", "_"))   #prepping for the url
+
+for movie in movieList:
+    scrapeWikiMovie("https://en.wikipedia.org/wiki/" + movie)
