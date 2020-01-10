@@ -12,12 +12,18 @@ def scrapeWikiMovie(url):
     
     directedBy = ""
     movieName = infoTable.tr.string
+    releaseDates = [] 
 
-    all_tr = infoTable.find_all('tr')
+    all_tr = infoTable.find_all('tr')    #saving all table rows to this, can iterate through them
     for tr in all_tr:
         if tr.th != None:
             if tr.th.string == "Directed by":
                 directedBy = tr.th.next_sibling.string
-    print("Movie: " + movieName + "\n" + "Directed by: " + directedBy)
+            if tr.th.string == "Release date":
+                li = tr.th.next_sibling.find_all('li')
+                for tag in li:
+                    releaseDates.append(tag.get_text())
 
-scrapeWikiMovie("https://en.wikipedia.org/wiki/Once_Upon_a_Time_in_Hollywood")
+    print("Movie: " + movieName + "\n" + "Directed by: " + directedBy + "\n" + "Release date: " + str(releaseDates) + "\n")
+
+scrapeWikiMovie("https://en.wikipedia.org/wiki/Cold_War_(2018_film)")
