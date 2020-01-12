@@ -40,12 +40,36 @@ def findStars(infoSoup):
                 li = tr.td.find_all('li')
                 for tag in li:
                     stars.append(tag.string)
-                while stars == []: # 'while' because there are different ways of accessing this info
+                if stars == []:
                     a = tr.td.find_all('a')
                     for tag in a:
                         stars.append(tag.string)
-                    stars.append(tr.td.string)
+                    if stars == []:
+                        stars.append(tr.td.string)
     return(stars)
+
+def findPlot(soup):
+    plot = ""
+    rightDiv = None
+    divs = soup.find_all('div')
+    for d in divs:
+        if d(class_="mw-parser-output"):
+            rightDiv = d
+    if rightDiv != None:
+        siblings = rightDiv.find_all(['h2', 'p'])
+        count = 0
+        another = 0
+        for tag in siblings:
+            if tag(id="Plot"):
+                count = 1
+            if count > 0:
+                plot += tag.get_text() + "\n"
+                another += 1
+            elif count > 3:
+                pass
+        print(len(siblings))
+        print("another: " + str(another))
+    return(plot)
 
 def scrapeWikiMovie(url):
     res = requests.get(url)  # retrieves the page
@@ -57,7 +81,7 @@ def scrapeWikiMovie(url):
     releaseDates = findReleaseDate(infoTable)
     movieName = findMovieName(infoTable)
     starring = findStars(infoTable)    # some of these still dont come out right
-    plot = ""
+    plot = findPlot(wikiSoup)
 
     if movieName == "" or movieName == None:
         print("Something wrong with movieName " + url)
@@ -71,8 +95,9 @@ def scrapeWikiMovie(url):
 
     print("Movie: " + movieName + "\n" + "Starring: " + str(starring) + "\n" + "Directed by: " + directedBy + "\n" + "Release date: " + str(releaseDates) + "\n")
     print("\n")
+    print(plot)
 
-#scrapeWikiMovie("https://en.wikipedia.org/wiki/Joker_(2019_film)")
+scrapeWikiMovie("https://en.wikipedia.org/wiki/Joker_(2019_film)")
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/I,_Daniel_Blake")
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/Pain_and_Glory")
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/Once_Upon_a_Time_in_Hollywood")
@@ -83,8 +108,8 @@ text = f.readline()
 f.close()
 txtList = text.split(";")
 movieList = []
-for movie in txtList:
-    movieList.append(movie.replace(" ", "_"))   #prepping for the url
+#for movie in txtList:
+ #   movieList.append(movie.replace(" ", "_"))   #prepping for the url
 
-for movie in movieList:
-    scrapeWikiMovie("https://en.wikipedia.org/wiki/" + movie)
+#for movie in movieList:
+#    scrapeWikiMovie("https://en.wikipedia.org/wiki/" + movie)
