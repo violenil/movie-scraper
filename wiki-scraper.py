@@ -37,10 +37,11 @@ def findStars(infoSoup):
                 li = tr.td.find_all('li')
                 for tag in li:
                     stars.append(tag.string)
-                if stars == []:
+                while stars == []: # 'while' because there are different ways of accessing this info
                     a = tr.td.find_all('a')
                     for tag in a:
                         stars.append(tag.string)
+                    stars.append(tr.td.string)
     return(stars)
 
 def scrapeWikiMovie(url):
