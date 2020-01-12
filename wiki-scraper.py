@@ -5,9 +5,15 @@ import csv
 import re
 
 def findMovieName(infoSoup):
+    '''
+    The simplest of them all.
+    '''
     return(infoSoup.tr.string)
 
 def findDirector(infoSoup):
+    '''
+    Almost as simple as movie name. But directors seem to be stored in 2 different ways.
+    '''
     director = ""
     all_tr = infoSoup.find_all('tr')    #saving all table rows to this, can iterate through them
     for tr in all_tr:
@@ -19,6 +25,9 @@ def findDirector(infoSoup):
     return(director)
 
 def findReleaseDate(infoSoup):
+    '''
+    Dates in html are stored a little differently to how we want them, so I process them here with regex
+    '''
     releaseDates = []
     all_tr = infoSoup.find_all('tr')    #saving all table rows to this, can iterate through them
     for tr in all_tr:
@@ -32,6 +41,9 @@ def findReleaseDate(infoSoup):
     return(releaseDates)
 
 def findStars(infoSoup):
+    '''
+    Stars are stored in either the 'li' tag or the 'a' or in the 'td' tag itself- different layers of nesting
+    '''
     stars = []
     all_tr = infoSoup.find_all('tr')    #saving all table rows to this, can iterate through them
     for tr in all_tr:
@@ -44,7 +56,7 @@ def findStars(infoSoup):
                     a = tr.td.find_all('a')
                     for tag in a:
                         stars.append(tag.string)
-                    if stars == []:
+                    if stars == []:     # if we still havent found any stars, they must simply be in the top layer 'td'
                         stars.append(tr.td.string)
     return(stars)
 
@@ -90,6 +102,9 @@ def scrapeWikiMovie(url):
     starring = findStars(infoTable)    # some of these still dont come out right
     plot = findPlot(wikiSoup)
 
+    """
+    some testing
+    """
     if movieName == "" or movieName == None:
         print("Something wrong with movieName " + url)
         print("\n")
