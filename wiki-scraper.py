@@ -67,7 +67,12 @@ def findPlot(soup):
             if tag(id="Plot"):
                 count += 1
             if count > 0 and count <= 3:
-                plot += tag.get_text() + "\n"
+                if tag.get_text() == "Cast[edit]":      #this seems to be the next heading under plot and we dont want it
+                    break
+                elif tag.get_text() == "Plot[edit]":
+                    plot += "Plot" + "\n"
+                else:
+                    plot += tag.get_text() + "\n"
                 count += 1
             elif count > 3:
                 count = 0     # because we only want to get the first three siblings (including the "Plot" heading)
@@ -99,9 +104,9 @@ def scrapeWikiMovie(url):
     print("\n")
     print(plot)
 
-scrapeWikiMovie("https://en.wikipedia.org/wiki/Joker_(2019_film)")
-scrapeWikiMovie("https://en.wikipedia.org/wiki/Summertime_(2015_film)")
-scrapeWikiMovie("https://en.wikipedia.org/wiki/Pain_and_Glory")
+#scrapeWikiMovie("https://en.wikipedia.org/wiki/Joker_(2019_film)")
+#scrapeWikiMovie("https://en.wikipedia.org/wiki/Summertime_(2015_film)")
+#scrapeWikiMovie("https://en.wikipedia.org/wiki/Pain_and_Glory")
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/Once_Upon_a_Time_in_Hollywood")
 
 
@@ -110,8 +115,8 @@ text = f.readline()
 f.close()
 txtList = text.split(";")
 movieList = []
-#for movie in txtList:
- #   movieList.append(movie.replace(" ", "_"))   #prepping for the url
+for movie in txtList:
+    movieList.append(movie.replace(" ", "_"))   #prepping for the url
 
-#for movie in movieList:
-#    scrapeWikiMovie("https://en.wikipedia.org/wiki/" + movie)
+for movie in movieList:
+    scrapeWikiMovie("https://en.wikipedia.org/wiki/" + movie)
