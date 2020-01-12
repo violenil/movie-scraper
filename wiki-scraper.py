@@ -49,26 +49,28 @@ def findStars(infoSoup):
     return(stars)
 
 def findPlot(soup):
+    """
+    This was tricky because for some or other reason wikipedia has decided not to hierarchically order paragraphs under headings
+    like you would expect (heading > paragraph) but instead has them as siblings, which is what made it quite difficult to access 
+    the three paragraphs that come right after the plot 'heading'
+    """
     plot = ""
     rightDiv = None
-    divs = soup.find_all('div')
+    divs = soup.find_all('div')  # div is an identifiable tag
     for d in divs:
-        if d(class_="mw-parser-output"):
+        if d(class_="mw-parser-output"):   # the dig we are looking for has this attribute
             rightDiv = d
     if rightDiv != None:
-        siblings = rightDiv.find_all(['h2', 'p'])
+        siblings = rightDiv.find_all(['h2', 'p'])   # can find all headings (h2) and all paragraphs (p) under this div (remember, h2 and p are siblings)
         count = 0
-        another = 0
         for tag in siblings:
             if tag(id="Plot"):
-                count = 1
-            if count > 0:
+                count += 1
+            if count > 0 and count <= 3:
                 plot += tag.get_text() + "\n"
-                another += 1
+                count += 1
             elif count > 3:
-                pass
-        print(len(siblings))
-        print("another: " + str(another))
+                count = 0     # because we only want to get the first three siblings (including the "Plot" heading)
     return(plot)
 
 def scrapeWikiMovie(url):
@@ -98,8 +100,8 @@ def scrapeWikiMovie(url):
     print(plot)
 
 scrapeWikiMovie("https://en.wikipedia.org/wiki/Joker_(2019_film)")
-#scrapeWikiMovie("https://en.wikipedia.org/wiki/I,_Daniel_Blake")
-#scrapeWikiMovie("https://en.wikipedia.org/wiki/Pain_and_Glory")
+scrapeWikiMovie("https://en.wikipedia.org/wiki/Summertime_(2015_film)")
+scrapeWikiMovie("https://en.wikipedia.org/wiki/Pain_and_Glory")
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/Once_Upon_a_Time_in_Hollywood")
 
 
