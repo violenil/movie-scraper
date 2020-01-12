@@ -2,6 +2,7 @@ import sys
 import requests  # to download
 import bs4
 import csv
+import re
 
 def findMovieName(infoSoup):
     return(infoSoup.tr.string)
@@ -25,7 +26,9 @@ def findReleaseDate(infoSoup):
             if tr.th.string == "Release date":
                 li = tr.th.next_sibling.find_all('li')
                 for tag in li:
-                    releaseDates.append(tag.get_text())
+                    dateBlob = tag.get_text()   #this comes in a weird format from which date and location need to be extracted 
+                    date = re.search("(\(\d{4}-\d{2}-\d{2})\s*(\D+)?", dateBlob) # -->format will be: (yyyy-mm-dd) (location)
+                    releaseDates.append(date.group(0))
     return(releaseDates)
 
 def findStars(infoSoup):
@@ -66,7 +69,8 @@ def scrapeWikiMovie(url):
         print("Something wrong with starring " + url)
         print("\n")
 
-    #print("Movie: " + movieName + "\n" + "Starring: " + str(starring) + "\n" + "Directed by: " + directedBy + "\n" + "Release date: " + str(releaseDates) + "\n")
+    print("Movie: " + movieName + "\n" + "Starring: " + str(starring) + "\n" + "Directed by: " + directedBy + "\n" + "Release date: " + str(releaseDates) + "\n")
+    print("\n")
 
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/Joker_(2019_film)")
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/I,_Daniel_Blake")
