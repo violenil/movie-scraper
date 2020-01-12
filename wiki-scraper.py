@@ -3,6 +3,45 @@ import requests  # to download
 import bs4
 import csv
 
+def findMovieName(infoSoup):
+    return(infoSoup.tr.string)
+
+def findDirector(infoSoup):
+    director = ""
+    all_tr = infoSoup.find_all('tr')    #saving all table rows to this, can iterate through them
+    for tr in all_tr:
+        if tr.th != None:
+            if tr.th.string == "Directed by":
+                director = tr.th.next_sibling.string
+        if director == None:
+            director = tr.th.next_sibling.get_text()
+    return(director)
+
+def findReleaseDate(infoSoup):
+    releaseDates = []
+    all_tr = infoSoup.find_all('tr')    #saving all table rows to this, can iterate through them
+    for tr in all_tr:
+        if tr.th != None:
+            if tr.th.string == "Release date":
+                li = tr.th.next_sibling.find_all('li')
+                for tag in li:
+                    releaseDates.append(tag.get_text())
+    return(releaseDates)
+
+def findStars(infoSoup):
+    stars = []
+    all_tr = infoSoup.find_all('tr')    #saving all table rows to this, can iterate through them
+    for tr in all_tr:
+        if tr.th != None:
+            if tr.th.string == "Starring":
+                li = tr.td.find_all('li')
+                for tag in li:
+                    stars.append(tag.string)
+                if stars == []:
+                    a = tr.td.find_all('a')
+                    for tag in a:
+                        stars.append(tag.string)
+    return(stars)
 
 def scrapeWikiMovie(url):
     res = requests.get(url)  # retrieves the page
@@ -10,28 +49,29 @@ def scrapeWikiMovie(url):
     wikiSoup = bs4.BeautifulSoup(res.text, "html.parser") # res.text is all text from page, html.parser helps to structure the text into html format
     infoTable = wikiSoup.find(class_="infobox vevent")
     
-    directedBy = ""
-    movieName = infoTable.tr.string
-    releaseDates = [] 
-    starring = []    # some of these still dont come out right
+    directedBy = findDirector(infoTable)
+    releaseDates = findReleaseDate(infoTable)
+    movieName = findMovieName(infoTable)
+    starring = findStars(infoTable)    # some of these still dont come out right
     plot = ""
 
-    all_tr = infoTable.find_all('tr')    #saving all table rows to this, can iterate through them
-    for tr in all_tr:
-        if tr.th != None:
-            if tr.th.string == "Directed by":
-                directedBy = tr.th.next_sibling.string
-            if tr.th.string == "Release date":
-                li = tr.th.next_sibling.find_all('li')
-                for tag in li:
-                    releaseDates.append(tag.get_text())
-            if tr.th.string == "Starring":
-                li = tr.td.find_all('li')
-                for tag in li:
-                    starring.append(tag.string)
+    if movieName == "" or movieName == None:
+        print("Something wrong with movieName " + url)
+        print("\n")
+    if releaseDates == [] or releaseDates == None:
+        print("Something wrong with releaseDates "+ url)
+        print("\n")
+    if starring == [] or starring == None:
+        print("Something wrong with starring " + url)
+        print("\n")
 
-    print("Movie: " + movieName + "\n" + "Directed by: " + directedBy + "\n" + "Release date: " + str(releaseDates) + "\n")
-    print("Starring: " + str(starring))
+    #print("Movie: " + movieName + "\n" + "Starring: " + str(starring) + "\n" + "Directed by: " + directedBy + "\n" + "Release date: " + str(releaseDates) + "\n")
+
+#scrapeWikiMovie("https://en.wikipedia.org/wiki/Joker_(2019_film)")
+#scrapeWikiMovie("https://en.wikipedia.org/wiki/I,_Daniel_Blake")
+#scrapeWikiMovie("https://en.wikipedia.org/wiki/Pain_and_Glory")
+#scrapeWikiMovie("https://en.wikipedia.org/wiki/Once_Upon_a_Time_in_Hollywood")
+
 
 f = open('movienames.txt', 'r')
 text = f.readline()
