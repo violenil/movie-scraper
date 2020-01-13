@@ -58,7 +58,8 @@ def findStars(infoSoup):
                         stars.append(tag.string)
                     if stars == []:     # if we still havent found any stars, they must simply be in the top layer 'td'
                         stars.append(tr.td.string)
-    return(stars)
+    if stars == None or stars == []: return(["No stars."])
+    else: return(stars)
 
 def findPlot(soup):
     """
@@ -91,8 +92,9 @@ def findPlot(soup):
     return(plot)
 
 def scrapeWikiMovie(url):
+    print(url)
     res = requests.get(url)  # retrieves the page
-    res.raise_for_status()   # checks for any errors
+    res.raise_for_status()  # checks for any errors
     wikiSoup = bs4.BeautifulSoup(res.text, "html.parser") # res.text is all text from page, html.parser helps to structure the text into html format
     infoTable = wikiSoup.find(class_="infobox vevent")
     
@@ -115,10 +117,14 @@ def scrapeWikiMovie(url):
         print("Something wrong with starring " + url)
         print("\n")
 
-    print("Movie: " + movieName + "\n" + "Starring: " + str(starring) + "\n" + "Directed by: " + directedBy + "\n" + "Release date: " + str(releaseDates) + "\n")
-    print("\n")
-    print(plot)
+    result = [movieName, starring, directedBy, releaseDates, plot]
+    return(result)
 
+    #print("Movie: " + movieName + "\n" + "Starring: " + str(starring) + "\n" + "Directed by: " + directedBy + "\n" + "Release date: " + str(releaseDates) + "\n")
+    #print("\n")
+    #print(plot)
+
+#scrapeWikiMovie("https://en.wikipedia.org/wiki/Chorus_(2015_film)")
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/Joker_(2019_film)")
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/Summertime_(2015_film)")
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/Pain_and_Glory")
@@ -128,10 +134,20 @@ def scrapeWikiMovie(url):
 f = open('movienames.txt', 'r')
 text = f.readline()
 f.close()
+
 txtList = text.split(";")
 movieList = []
+
 for movie in txtList:
     movieList.append(movie.replace(" ", "_"))   #prepping for the url
+    if movie.replace(" ", "_") == "%0A": break
 
-for movie in movieList:
-    scrapeWikiMovie("https://en.wikipedia.org/wiki/" + movie)
+for m in movieList:
+    if m == "":
+        movieList.remove(m)
+
+with open('movieData.csv', 'w', newline='') as file:
+    writer = csv.writer(file, delimiter='\t')
+    for movie in movieList:
+        lineTextList = scrapeWikiMovie("https://en.wikipedia.org/wiki/" + movie)
+        writer.writerow(lineTextList)
