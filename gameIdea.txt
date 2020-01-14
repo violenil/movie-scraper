@@ -1,0 +1,15 @@
+The prompt should first ask if the user wants to go into game mode or display mode
+
+1) Game mode
+	- present user with plot --> ask for movieName --> match?
+	- present user with movieName --> ask for director --> match?
+	- present user with actor --> ask for movieName --> match?
+	- present user with movieName --> ask for actor --> match?
+	- present user with date --> ask for movieName from that year --> match?
+
+2) Display mode
+	- display all info for user given movieName
+	- display all movieNames in alphabetical order
+	- display all movieNames by release date
+	- search for particular movieName (if found, show all info; if not, tell user it doesnt exist)
+	- 

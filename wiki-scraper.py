@@ -130,6 +130,7 @@ def scrapeWikiMovie(url):
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/Pain_and_Glory")
 #scrapeWikiMovie("https://en.wikipedia.org/wiki/Once_Upon_a_Time_in_Hollywood")
 
+miniList = ["Joker_(2019_film)", "Summertime_(2015_film)", "Pain_and_Glory", "Once_Upon_a_Time_in_Hollywood"]
 
 f = open('movienames.txt', 'r')
 text = f.readline()
