@@ -142,6 +142,8 @@ for movie in txtList:
     movieList.append(movie.replace(" ", "_"))   #prepping for the url
     if movie.replace(" ", "_") == "%0A": break
 
+movieList = movieList[:-1]
+print(str(len(movieList)))
 for m in movieList:
     if m == "":
         movieList.remove(m)
