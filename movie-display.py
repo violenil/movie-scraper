@@ -1,5 +1,8 @@
 import csv
 import re
+import random
+from random import seed
+from random import randint
 
 myData = { "Once Upon a Time in Hollywood" : { "director" : "Quintin Tarantino", 
             "stars" : ["Leonardo di Caprio", "Brad Pitt", "Margot Robbie", "Emilie Hirsch", "Margaret Quallie", "Timothy Olyphant", "Austin Butler", "Dakota Fanning", "Bruce Dern", "Al Pacino"], 
@@ -75,8 +78,56 @@ def playGame():
     This is the function that has a list of questions for the user and will pick one at random. For each question, an answer is retieved from the database and checked
     against the user input. Should say whether matches or not.
     """
+    print("Here's how the game works. A question is selected at random for you about the movies in our collection ranging from the year 2015 to 2019. You have\n" \
+    "three tries to give the correct answer. Upon the third incorrect answer, the correct answer will be revealed. Enter q at any point to quit.\n")
+    userQuit = None
+    questions = ["Here's a plot. Guess what movie it is from by entering the movie title.", "Here's a movie title. Please name the director of this movie.", 
+            "Here's the name of a star. Name one movie he/she acted in between the years 2015 - 2019.", "Here's a movie title. Please name one actor in this movie.",
+            "Here's a year. Name one movie that was released that year."]
+    while userQuit == None:
+        seed(1)
+       # qVal = randint(0, 4)
+        qVal = 0
+        print(questions[qVal])
+        movie, info = random.choice(list(myData.items()))
+        if qVal == 0:
+            print(info["plot"])
+            correctAns = movie
+        elif qVal == 1:
+            print(movie)
+            answer = input("Answer: ")
+            correctAns = info["director"]
+        elif qVal == 2:
+            print(random.choice(info["stars"]))
+            answer = input("Answer: ")
+            correctAns = movie
+        elif qVal == 3:
+            print(movie)
+            answer = input("Answer: ")
+            correctList = info["stars"]
+        elif qVal == 4:
+            years = ["2015", "2016", "2017", "2018", "2019"]
+            chosenYear = random.choice(years))
+            print(chosenYear)
+            answer = input("Answer: ")
+            correctList = list(myData.values())
 
-
+# this for loop runs every time the while loop iterates (new question)
+        
+        userAns = input("Answer: ")
+        for tries in range(3):
+            if userAns == correctAns or userAns in correctList:
+                print("Correct!")
+                break
+            elif tries == 2:
+                print("Sorry, you're out of tries.")
+            elif userAns == 'q':
+                break
+            else:
+                print("Incorrect.Try again.")
+                userAns = input("Answer: ")
+        if userAns == "q":
+            break
 while True:
     modeString = input("Enter 1 for display mode. Enter 2 for game mode. Enter 'q' to exit.\n")
 
