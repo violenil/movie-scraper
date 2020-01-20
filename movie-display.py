@@ -88,10 +88,10 @@ def playGame():
         seed(1)
        # qVal = randint(0, 4)
         qVal = 0
-        print(questions[qVal])
+        print(questions[qVal] + "\n")
         movie, info = random.choice(list(myData.items()))
         if qVal == 0:
-            print(info["plot"])
+            print(info["plot"] + "\n")
             correctAns = movie
         elif qVal == 1:
             print(movie)
@@ -107,7 +107,7 @@ def playGame():
             correctList = info["stars"]
         elif qVal == 4:
             years = ["2015", "2016", "2017", "2018", "2019"]
-            chosenYear = random.choice(years))
+            chosenYear = random.choice(years)
             print(chosenYear)
             answer = input("Answer: ")
             correctList = list(myData.values())
@@ -117,25 +117,63 @@ def playGame():
         userAns = input("Answer: ")
         for tries in range(3):
             if userAns == correctAns or userAns in correctList:
-                print("Correct!")
+                print("Correct!\n")
                 break
             elif tries == 2:
-                print("Sorry, you're out of tries.")
+                print("Sorry, you're out of tries.\n")
             elif userAns == 'q':
                 break
             else:
-                print("Incorrect.Try again.")
+                print("Incorrect.Try again.\n")
                 userAns = input("Answer: ")
         if userAns == "q":
             break
+print('''
+     O         O
+      \\     // 
+       \\   //
+        \\ // 
+       /~~~~~\ 
+,-------------------,
+| ,---------------, |
+| |               | |
+| |               | |
+| |               | |
+| |               | |
+| |_______________| |
+|___________________|
+|___________________|
+
+ _  _   __   _  _  __  ____    ____   __   ____  ____ 
+( \/ ) /  \ / )( \(  )(  __)  (  _ \ / _\ / ___)(  __)
+/ \/ \(  O )\ \/ / )(  ) _)    ) _ (/    \\___ \ ) _) 
+\_)(_/ \__/  \__/ (__)(____)  (____/\_/\_/(____/(____)
+
+        ''')
+
 while True:
     modeString = input("Enter 1 for display mode. Enter 2 for game mode. Enter 'q' to exit.\n")
 
     if modeString == "1":
-        print("Display start.")
+        print('''
+
+ ____  __  ____  ____  __     __   _  _    ____  ____  __   ____  ____ 
+(    \(  )/ ___)(  _ \(  )   / _\ ( \/ )  / ___)(_  _)/ _\ (  _ \(_  _)
+ ) D ( )( \___ \ ) __// (_/\/    \ )  /   \___ \  )( /    \ )   /  )(  
+(____/(__)(____/(__)  \____/\_/\_/(__/    (____/ (__)\_/\_/(__\_) (__) 
+
+                ''')
         displayMovies()
     elif modeString == "2":
-        print("Game start.")
+        print('''
+
+  ___   __   _  _  ____    ____  ____  __   ____  ____ 
+ / __) / _\ ( \/ )(  __)  / ___)(_  _)/ _\ (  _ \(_  _)
+( (_ \/    \/ \/ \ ) _)   \___ \  )( /    \ )   /  )(  
+ \___/\_/\_/\_)(_/(____)  (____/ (__)\_/\_/(__\_) (__)
+                                                      
+                                                      
+                ''')
         playGame()
     elif modeString == "q":
         break
