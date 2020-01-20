@@ -86,8 +86,8 @@ def playGame():
             "Here's a year. Name one movie that was released that year."]
     while userQuit == None:
         seed(1)
-       # qVal = randint(0, 4)
-        qVal = 0
+        qVal = randint(0, 4)
+       # qVal = 0
         print(questions[qVal] + "\n")
         movie, info = random.choice(list(myData.items()))
         if qVal == 0:
@@ -127,7 +127,7 @@ def playGame():
                 print("Incorrect.Try again.\n")
                 userAns = input("Answer: ")
         if userAns == "q":
-            break
+            userQuit = True
 print('''
      O         O
       \\     // 
@@ -157,10 +157,10 @@ while True:
     if modeString == "1":
         print('''
 
- ____  __  ____  ____  __     __   _  _    ____  ____  __   ____  ____ 
-(    \(  )/ ___)(  _ \(  )   / _\ ( \/ )  / ___)(_  _)/ _\ (  _ \(_  _)
- ) D ( )( \___ \ ) __// (_/\/    \ )  /   \___ \  )( /    \ )   /  )(  
-(____/(__)(____/(__)  \____/\_/\_/(__/    (____/ (__)\_/\_/(__\_) (__) 
+ ____  __  ____  ____  __     __   _  _    _  _   __  ____  ____ 
+(    \(  )/ ___)(  _ \(  )   / _\ ( \/ )  ( \/ ) /  \(    \(  __)
+ ) D ( )( \___ \ ) __// (_/\/    \ )  /   / \/ \(  O )) D ( ) _) 
+(____/(__)(____/(__)  \____/\_/\_/(__/    \_)(_/ \__/(____/(____)
 
                 ''')
         displayMovies()
